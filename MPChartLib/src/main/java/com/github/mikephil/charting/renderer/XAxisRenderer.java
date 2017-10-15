@@ -8,6 +8,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Path;
 import android.graphics.RectF;
 
+import com.github.mikephil.charting.components.HighlightArea;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
@@ -397,5 +398,48 @@ public class XAxisRenderer extends AxisRenderer {
                 c.drawText(label, position[0] - xOffset, mViewPortHandler.contentBottom() - yOffset, mLimitLinePaint);
             }
         }
+    }
+
+    @Override
+    public void renderHighlightArea(Canvas c) {
+        List<HighlightArea> highlightAreas = mXAxis.getHighlightAreas();
+
+        if(highlightAreas == null || highlightAreas.size() == 0)
+            return;
+
+        for(int i=0; i < highlightAreas.size(); i++){
+            HighlightArea area = highlightAreas.get(i);
+
+            if(!area.isEnabled())
+                continue;
+
+            float[] startPosition = new float[]{area.getStartPoint(), 0f};
+            float[] endPosition = new float[]{area.getEndPoint(), 0f};
+
+            mTrans.pointValuesToPixel(startPosition);
+            mTrans.pointValuesToPixel(endPosition);
+
+            int clipRestoreCount = c.save();
+            mLimitLineClippingRect.set(mViewPortHandler.getContentRect());
+            mLimitLineClippingRect.inset(-(startPosition[1] - endPosition[1]), 0.f);
+            c.clipRect(mLimitLineClippingRect);
+
+            float leftSide = startPosition[0];
+            float topSide = mViewPortHandler.contentTop();
+            float rightSide = endPosition[0];
+            float bottomSide = mViewPortHandler.contentBottom();
+
+            RectF areaRect = new RectF(leftSide, topSide, rightSide, bottomSide);
+
+            mHighlightAreaPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+            mHighlightAreaPaint.setColor(area.getAreaColor());
+            mHighlightAreaPaint.setStrokeWidth(area.getBorderWidth());
+            mHighlightAreaPaint.setPathEffect(area.getDashPathEffect());
+
+            c.drawRect(areaRect, mHighlightAreaPaint);
+
+            c.restoreToCount(clipRestoreCount);
+        }
+
     }
 }

@@ -344,4 +344,9 @@ public class YAxisRenderer extends AxisRenderer {
             c.restoreToCount(clipRestoreCount);
         }
     }
+
+    @Override
+    public void renderHighlightArea(Canvas c) {
+
+    }
 }

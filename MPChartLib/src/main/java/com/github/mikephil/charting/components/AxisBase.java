@@ -108,9 +108,19 @@ public abstract class AxisBase extends ComponentBase {
     protected List<LimitLine> mLimitLines;
 
     /**
+     * array of Highlight Areas that can be set for the axis
+     */
+    protected List<HighlightArea> mHighlightAreas;
+
+    /**
      * flag indicating the limit lines layer depth
      */
     protected boolean mDrawLimitLineBehindData = false;
+
+    /**
+     * flag indicating the highlight areas layer depth
+     */
+    protected boolean mDrawHighlightAreaBehindData = true;
 
     /**
      * Extra spacing for `axisMinimum` to be added to automatically calculated `axisMinimum`
@@ -155,6 +165,7 @@ public abstract class AxisBase extends ComponentBase {
         this.mXOffset = Utils.convertDpToPixel(5f);
         this.mYOffset = Utils.convertDpToPixel(5f);
         this.mLimitLines = new ArrayList<LimitLine>();
+        this.mHighlightAreas = new ArrayList<HighlightArea>();
     }
 
     /**
@@ -442,6 +453,20 @@ public abstract class AxisBase extends ComponentBase {
 
     public boolean isDrawLimitLinesBehindDataEnabled() {
         return mDrawLimitLineBehindData;
+    }
+
+    /**
+     * If this is set to true, the LimitLines are drawn behind the actual data,
+     * otherwise on top. Default: false
+     *
+     * @param enabled
+     */
+    public void setDrawHighlightAreasBehindData(boolean enabled) {
+        mDrawHighlightAreaBehindData = enabled;
+    }
+
+    public boolean isDrawHighlightAreasBehindDataEnabled() {
+        return mDrawHighlightAreaBehindData;
     }
 
     /**
@@ -763,4 +788,34 @@ public abstract class AxisBase extends ComponentBase {
     {
         this.mSpaceMax = mSpaceMax;
     }
+
+    /**
+     * Adds a new highlight area to this axis
+     *
+     * @param a
+     */
+    public void addHighlightArea(HighlightArea a){
+        this.mHighlightAreas.add(a);
+    }
+
+    /**
+     * Removes a specified highlight area from this axis
+     *
+     * @param a
+     */
+    public void removeHighlightArea(HighlightArea a){
+        this.mHighlightAreas.remove(a);
+    }
+
+    /**
+     * Removes all highlight areas from this axis
+     *
+     */
+    public void removeAllHighlightAreas(){ this.mHighlightAreas.clear(); }
+
+    /**
+     * Returns all highlight areas of this axis
+     *
+     */
+    public List<HighlightArea> getHighlightAreas(){ return this.mHighlightAreas; }
 }
