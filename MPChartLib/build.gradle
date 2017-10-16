@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
-group='com.github.morteza-binary'
+group='com.github.binary-com'
 
 android {
     compileSdkVersion 25
