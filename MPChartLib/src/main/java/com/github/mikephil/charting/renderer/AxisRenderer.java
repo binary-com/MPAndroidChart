@@ -19,10 +19,14 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
  */
 public abstract class AxisRenderer extends Renderer {
 
-    /** base axis this axis renderer works with */
+    /**
+     * base axis this axis renderer works with
+     */
     protected AxisBase mAxis;
 
-    /** transformer to transform values to screen pixels and return */
+    /**
+     * transformer to transform values to screen pixels and return
+     */
     protected Transformer mTrans;
 
     /**
@@ -46,9 +50,14 @@ public abstract class AxisRenderer extends Renderer {
     protected Paint mLimitLinePaint;
 
     /**
+     * paint used for the limit lines label background
+     */
+    protected Paint mLimitLineLabelBackgroundPaint;
+
+    /**
      * paint used for the highlight areas
      */
-    protected  Paint mHighlightAreaPaint;
+    protected Paint mHighlightAreaPaint;
 
     public AxisRenderer(ViewPortHandler viewPortHandler, Transformer trans, AxisBase axis) {
         super(viewPortHandler);
@@ -56,7 +65,7 @@ public abstract class AxisRenderer extends Renderer {
         this.mTrans = trans;
         this.mAxis = axis;
 
-        if(mViewPortHandler != null) {
+        if (mViewPortHandler != null) {
 
             mAxisLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -73,6 +82,9 @@ public abstract class AxisRenderer extends Renderer {
 
             mLimitLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mLimitLinePaint.setStyle(Paint.Style.STROKE);
+
+            mLimitLineLabelBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mLimitLineLabelBackgroundPaint.setStyle(Style.FILL_AND_STROKE);
 
             mHighlightAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mHighlightAreaPaint.setStyle(Style.FILL_AND_STROKE);
@@ -213,7 +225,7 @@ public abstract class AxisRenderer extends Renderer {
         } else {
 
             double first = interval == 0.0 ? 0.0 : Math.ceil(yMin / interval) * interval;
-            if(mAxis.isCenterAxisLabelsEnabled()) {
+            if (mAxis.isCenterAxisLabelsEnabled()) {
                 first -= interval;
             }
 
@@ -257,7 +269,7 @@ public abstract class AxisRenderer extends Renderer {
                 mAxis.mCenteredEntries = new float[n];
             }
 
-            float offset = (float)interval / 2f;
+            float offset = (float) interval / 2f;
 
             for (int i = 0; i < n; i++) {
                 mAxis.mCenteredEntries[i] = mAxis.mEntries[i] + offset;

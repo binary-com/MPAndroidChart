@@ -29,7 +29,7 @@ public class YAxisRenderer extends AxisRenderer {
 
         this.mYAxis = yAxis;
 
-        if(mViewPortHandler != null) {
+        if (mViewPortHandler != null) {
 
             mAxisLabelPaint.setColor(Color.BLACK);
             mAxisLabelPaint.setTextSize(Utils.convertDpToPixel(10f));
@@ -129,6 +129,7 @@ public class YAxisRenderer extends AxisRenderer {
     }
 
     protected Path mRenderGridLinesPath = new Path();
+
     @Override
     public void renderGridLines(Canvas c) {
 
@@ -190,6 +191,7 @@ public class YAxisRenderer extends AxisRenderer {
     }
 
     protected float[] mGetTransformedPositionsBuffer = new float[2];
+
     /**
      * Transforms the values contained in the axis entries to screen pixels and returns them in form of a float array
      * of x- and y-coordinates.
@@ -198,7 +200,7 @@ public class YAxisRenderer extends AxisRenderer {
      */
     protected float[] getTransformedPositions() {
 
-        if(mGetTransformedPositionsBuffer.length != mYAxis.mEntryCount * 2){
+        if (mGetTransformedPositionsBuffer.length != mYAxis.mEntryCount * 2) {
             mGetTransformedPositionsBuffer = new float[mYAxis.mEntryCount * 2];
         }
         float[] positions = mGetTransformedPositionsBuffer;
@@ -246,6 +248,7 @@ public class YAxisRenderer extends AxisRenderer {
     protected Path mRenderLimitLines = new Path();
     protected float[] mRenderLimitLinesBuffer = new float[2];
     protected RectF mLimitLineClippingRect = new RectF();
+
     /**
      * Draws the LimitLines associated with this axis to the screen.
      *
@@ -286,14 +289,39 @@ public class YAxisRenderer extends AxisRenderer {
 
             mTrans.pointValuesToPixel(pts);
 
-            limitLinePath.moveTo(mViewPortHandler.contentLeft(), pts[1]);
-            limitLinePath.lineTo(mViewPortHandler.contentRight(), pts[1]);
+            String label = l.getLabel();
+
+            // Draw limit line and calculate line length when label has background
+            if (label != null && !label.equals("")
+                    && l.getLabelBackground() != null
+                    && l.getLabelBackground() != LimitLine.LimitLineLabelBackground.None) {
+                float lineOffset = (Utils.calcTextWidth(mLimitLinePaint, label) + l.getXOffset()) * 1.5f;
+
+                if (l.getLabelBackground() == LimitLine.LimitLineLabelBackground.POLYGON) {
+                    lineOffset += 25f;
+                }
+
+                if (l.getLabelPosition() == LimitLine.LimitLabelPosition.RIGHT_TOP
+                        || l.getLabelPosition() == LimitLine.LimitLabelPosition.RIGHT_BOTTOM) {
+
+                    limitLinePath.moveTo(mViewPortHandler.contentLeft(), pts[1]);
+                    limitLinePath.lineTo(mViewPortHandler.contentRight() -
+                                    lineOffset,
+                            pts[1]);
+                } else {
+                    limitLinePath.moveTo(mViewPortHandler.contentLeft() + lineOffset,
+                            pts[1]);
+                    limitLinePath.lineTo(mViewPortHandler.contentRight(), pts[1]);
+                }
+            } else {
+                limitLinePath.moveTo(mViewPortHandler.contentLeft(), pts[1]);
+                limitLinePath.lineTo(mViewPortHandler.contentRight(), pts[1]);
+            }
 
             c.drawPath(limitLinePath, mLimitLinePaint);
             limitLinePath.reset();
             // c.drawLines(pts, mLimitLinePaint);
 
-            String label = l.getLabel();
 
             // if drawing the limit-value label is enabled
             if (label != null && !label.equals("")) {
@@ -309,6 +337,26 @@ public class YAxisRenderer extends AxisRenderer {
                 float xOffset = Utils.convertDpToPixel(4f) + l.getXOffset();
                 float yOffset = l.getLineWidth() + labelLineHeight + l.getYOffset();
 
+                // Draw limit line label's background
+                if (l.getLabelBackground() != null
+                        && l.getLabelBackground() != LimitLine.LimitLineLabelBackground.None) {
+                    LimitLineLabelBackgroundRenderer llBackgroundRenderer = new LimitLineLabelBackgroundRenderer(
+                            mViewPortHandler,
+                            mLimitLinePaint,
+                            mTrans, l);
+
+                    llBackgroundRenderer.render(c, mLimitLineLabelBackgroundPaint);
+
+                    xOffset = Utils.calcTextWidth(mLimitLinePaint, label) / 4;
+                    yOffset = ((labelLineHeight / 4) + l.getYOffset());
+
+                    if (l.getLabelPosition() == LimitLine.LimitLabelPosition.LEFT_TOP
+                            || l.getLabelPosition() == LimitLine.LimitLabelPosition.RIGHT_TOP) {
+                        yOffset *= -1;
+                    }
+
+                }
+
                 final LimitLine.LimitLabelPosition position = l.getLabelPosition();
 
                 if (position == LimitLine.LimitLabelPosition.RIGHT_TOP) {
@@ -316,7 +364,7 @@ public class YAxisRenderer extends AxisRenderer {
                     mLimitLinePaint.setTextAlign(Align.RIGHT);
                     c.drawText(label,
                             mViewPortHandler.contentRight() - xOffset,
-                            pts[1] - yOffset + labelLineHeight, mLimitLinePaint);
+                            pts[1] - yOffset, mLimitLinePaint);
 
                 } else if (position == LimitLine.LimitLabelPosition.RIGHT_BOTTOM) {
 
@@ -330,7 +378,7 @@ public class YAxisRenderer extends AxisRenderer {
                     mLimitLinePaint.setTextAlign(Align.LEFT);
                     c.drawText(label,
                             mViewPortHandler.contentLeft() + xOffset,
-                            pts[1] - yOffset + labelLineHeight, mLimitLinePaint);
+                            pts[1] - yOffset, mLimitLinePaint);
 
                 } else {
 
