@@ -54,6 +54,7 @@ class LimitLineLabelBackgroundRenderer {
 
         bgPaint.setStyle(mLimitLine.getLabelBackgroundStyle());
         bgPaint.setColor(mLimitLine.getLabelBackgroundColor());
+        bgPaint.setStrokeWidth(mLimitLine.getLabelBackgroundStrokeWidth());
 
         c.drawPath(path, bgPaint);
 
