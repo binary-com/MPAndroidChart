@@ -106,23 +106,27 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
         xAxis.enableGridDashedLine(10f, 10f, 0f);
         //xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
         //xAxis.addLimitLine(llXAxis); // add x-axis limit line
+        xAxis.setAxisMaximum(50);
 
 
         Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
 
-        LimitLine ll1 = new LimitLine(150f, "Upper Limit");
+        LimitLine ll1 = new LimitLine(150f, "124526.2145");
         ll1.setLineWidth(4f);
         ll1.enableDashedLine(10f, 10f, 0f);
         ll1.setLabelPosition(LimitLabelPosition.RIGHT_TOP);
         ll1.setTextSize(10f);
         ll1.setTypeface(tf);
+        ll1.setLabelBackground(LimitLine.LimitLineLabelBackground.RECTANGLE);
+        ll1.setLabelBackgroundColor(Color.argb(50, 50, 50, 50));
 
-        LimitLine ll2 = new LimitLine(-30f, "Lower Limit");
+        LimitLine ll2 = new LimitLine(-30f, "965241.21235");
         ll2.setLineWidth(4f);
         ll2.enableDashedLine(10f, 10f, 0f);
         ll2.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
-        ll2.setTextSize(10f);
         ll2.setTypeface(tf);
+        ll2.setLabelBackground(LimitLine.LimitLineLabelBackground.POLYGON);
+        ll2.setLabelBackgroundColor(Color.argb(50, 50, 50, 50));
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
@@ -204,7 +208,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(mChart.getData() != null) {
+                if (mChart.getData() != null) {
                     mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
                     mChart.invalidate();
                 }
@@ -250,7 +254,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.CUBIC_BEZIER
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.CUBIC_BEZIER);
+                            : LineDataSet.Mode.CUBIC_BEZIER);
                 }
                 mChart.invalidate();
                 break;
@@ -264,7 +268,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.STEPPED
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.STEPPED);
+                            : LineDataSet.Mode.STEPPED);
                 }
                 mChart.invalidate();
                 break;
@@ -278,7 +282,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.HORIZONTAL_BEZIER
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.HORIZONTAL_BEZIER);
+                            : LineDataSet.Mode.HORIZONTAL_BEZIER);
                 }
                 mChart.invalidate();
                 break;
@@ -362,7 +366,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
 
         if (mChart.getData() != null &&
                 mChart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet)mChart.getData().getDataSetByIndex(0);
+            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
             set1.setValues(values);
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
@@ -390,8 +394,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
                 // fill drawable only supported on api level 18 and above
                 Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
                 set1.setFillDrawable(drawable);
-            }
-            else {
+            } else {
                 set1.setFillColor(Color.BLACK);
             }
 
@@ -416,7 +419,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
         Log.i("Gesture", "END, lastGesture: " + lastPerformedGesture);
 
         // un-highlight values after the gesture is finished and no single-tap
-        if(lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
+        if (lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
             mChart.highlightValues(null); // or highlightTouch(null) for callback to onNothingSelected(...)
     }
 
