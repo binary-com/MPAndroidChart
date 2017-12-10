@@ -40,7 +40,7 @@ class LimitLineLabelBackgroundRenderer {
         this.textWidth =
                 (Utils.calcTextWidth(mLimitLinePaint, mLimitLine.getLabel()) + mLimitLine.getXOffset()) * 1.5f;
         this.textHeight =
-                Utils.calcTextHeight(mLimitLinePaint, mLimitLine.getLabel()) * 2;
+                Utils.calcTextHeight(mLimitLinePaint, mLimitLine.getLabel()) * 1.5f;
 
         if (mLimitLine.getLabelBackground() == LimitLine.LimitLineLabelBackground.RECTANGLE) {
             path = this.calculateRectanglePath();
