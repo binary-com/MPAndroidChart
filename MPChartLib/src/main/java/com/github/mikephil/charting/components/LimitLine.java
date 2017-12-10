@@ -67,6 +67,11 @@ public class LimitLine extends ComponentBase {
     private int mLabelBackgroundColor = Color.rgb(237, 91, 91);
 
     /**
+     * the width of label background's border
+     */
+    private float mLabelBackgroundStrokeWidth = 5f;
+
+    /**
      * enum that indicates the position of the LimitLine label
      */
     public enum LimitLabelPosition {
@@ -302,5 +307,17 @@ public class LimitLine extends ComponentBase {
      */
     public void setLabelBackgroundColor(int mLabelBackgroundColor) {
         this.mLabelBackgroundColor = mLabelBackgroundColor;
+    }
+
+    public float getLabelBackgroundStrokeWidth() {
+        return mLabelBackgroundStrokeWidth;
+    }
+
+    public void setLabelBackgroundStrokeWidth(float width) {
+        if (width < 0.2f)
+            width = 0.2f;
+        if (width > 12.0f)
+            width = 12.0f;
+        this.mLabelBackgroundStrokeWidth = Utils.convertDpToPixel(width);
     }
 }

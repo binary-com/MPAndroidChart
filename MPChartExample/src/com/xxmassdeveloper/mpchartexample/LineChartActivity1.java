@@ -3,6 +3,7 @@ package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -127,6 +128,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
         ll2.setTypeface(tf);
         ll2.setLabelBackground(LimitLine.LimitLineLabelBackground.POLYGON);
         ll2.setLabelBackgroundColor(Color.argb(50, 50, 50, 50));
+        ll2.setLabelBackgroundStyle(Paint.Style.STROKE);
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
