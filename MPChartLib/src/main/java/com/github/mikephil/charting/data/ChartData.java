@@ -446,6 +446,30 @@ public abstract class ChartData<T extends IDataSet<? extends Entry>> {
     }
 
     /**
+     * Adds an Entry to the DataSet at the specified index.
+     * Entries are added to the end of the list.
+     *
+     * @param e
+     * @param dataSetLabel
+     */
+    public void addEntry(Entry e, String dataSetLabel) {
+
+        IDataSet set = getDataSetByLabel(dataSetLabel, false);
+
+        if (set != null) {
+
+            // add the entry to the dataset
+            if (!set.addEntry(e))
+                return;
+
+            calcMinMax(e, set.getAxisDependency());
+
+        } else {
+            Log.e("addEntry", "Cannot add Entry because dataSetIndex too high or too low.");
+        }
+    }
+
+    /**
      * Adjusts the current minimum and maximum values based on the provided Entry object.
      *
      * @param e
